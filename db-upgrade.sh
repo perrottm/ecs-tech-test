@@ -54,14 +54,21 @@ echo ""
 echo "Checking scripts for new versions..."
 echo ""
 
-for s in $SCRIPTS 
-do
-    SCRIPTS_TO_RUN=($(cut -f1 <<< $s))
-    if [ $SCRIPTS_TO_RUN -gt $CURRENT_VERION ] 
+declare -a SCRIPTS_TO_RUN=( $(cut -f1 <<< $SCRIPTS) )
+
+for SCRIPT in "${SCRIPTS_TO_RUN[@]}" ; do
+    SCRIPT_VER=$(sed 's/[^0-9]*//g' <<< $SCRIPT)
+
+    if [ $SCRIPT_VER -gt $CURRENT_VERION ] 
     then   
-        echo $SCRIPTS_TO_RUN
-        CURRENT_SCRIPTS+=([$SCRIPTS_TO_RUN]=$SCRIPTS)
+        echo $SCRIPT_VER
+        CURRENT_SCRIPTS+=([$SCRIPT_VER]=$SCRIPT)
     fi
+done
+
+for EXECUTE in ${!CURRENT_SCRIPTS[@]}; do
+    echo ${CURRENT_SCRIPTS[${EXECUTE}]}
+
 done
 
 rm -f $C_VER_FILE
