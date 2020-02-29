@@ -29,10 +29,14 @@ get_new_scripts() {
 }
 
 execute_scripts(){
-    for e in $EXECUTE 
+    for e in ${!CURRENT_SCRIPTS[@]}
     do
-        mysql --user="$USER" --host="$HOST" --password="$PASS" --database="$DB_NAME" < $DIR/$e
+    echo "doing: " ${CURRENT_SCRIPTS[${e}]}
+        mysql --user="$USER" --host="$HOST" --password="$PASS" --database="$DB_NAME" < $DIR/${CURRENT_SCRIPTS[${e}]}
+        mysql --user="$USER" --host="$HOST" --password="$PASS" --database="$DB_NAME" --execute="UPDATE versionTable SET version='$SCRIPT_VER'"
     done
+
+
 }
 
 #Simple checker to ensure user is aware of the scripts actions.
@@ -54,21 +58,15 @@ echo ""
 echo "Checking scripts for new versions..."
 echo ""
 
-declare -a SCRIPTS_TO_RUN=( $(cut -f1 <<< $SCRIPTS) )
-
-for SCRIPT in "${SCRIPTS_TO_RUN[@]}" ; do
+while IFS= read -r SCRIPT; do
     SCRIPT_VER=$(sed 's/[^0-9]*//g' <<< $SCRIPT)
 
-    if [ $SCRIPT_VER -gt $CURRENT_VERION ] 
+    if [ $(($SCRIPT_VER)) -gt $(($CURRENT_VERION)) ] 
     then   
-        echo $SCRIPT_VER
         CURRENT_SCRIPTS+=([$SCRIPT_VER]=$SCRIPT)
     fi
-done
+done < <(printf '%s\n' "$SCRIPTS")
 
-for EXECUTE in ${!CURRENT_SCRIPTS[@]}; do
-    echo ${CURRENT_SCRIPTS[${EXECUTE}]}
-
-done
+execute_scripts
 
 rm -f $C_VER_FILE
