@@ -3,8 +3,8 @@
 #This script will run any SQL Scripts within a desired directory, to a desired Database. To execute the script run the following command:
 #./db-upgrade.sh directory username db-host db-name db-password.
 #NOTE: This will only execute scripts OF A LOWER VERSION VALUE SPECIFIED IN THE FILE NAME.
-
 #Defining variables
+
 DIR=$1
 USER=$2
 HOST=$3
@@ -30,12 +30,10 @@ get_new_scripts() {
 execute_scripts(){
     for e in ${!CURRENT_SCRIPTS[@]}
     do
-    echo "doing: " ${CURRENT_SCRIPTS[${e}]}
-        mysql --user="$USER" --host="$HOST" --password="$PASS" --database="$DB_NAME" < $DIR/${CURRENT_SCRIPTS[${e}]}
+        echo "Running script: " "${CURRENT_SCRIPTS[${e}]}"
+        mysql --user="$USER" --host="$HOST" --password="$PASS" --database="$DB_NAME" < "${DIR}/${CURRENT_SCRIPTS[${e}]}"
         mysql --user="$USER" --host="$HOST" --password="$PASS" --database="$DB_NAME" --execute="UPDATE versionTable SET version='$SCRIPT_VER'"
     done
-
-
 }
 
 #Simple checker to ensure user is aware of the scripts actions.
