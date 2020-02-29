@@ -11,7 +11,6 @@ HOST=$3
 DB_NAME=$4
 PASS=$5
 C_VER_FILE=/tmp/current_ver
-REGEX="([0-9]+)"
 
 #Gets the current version value stored on the database and stores it to a variable.
 get_current_version() {
