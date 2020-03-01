@@ -32,7 +32,7 @@ get_new_scripts() {
     sleep 3
 }
 
-#Reads through the list of current scripts, takes the number from the file and checks it against the current version number. 
+#Reads through the list of current scripts, takes the number from the file and checks it against the current version number. Those that are greater than the current version are added to a new variable.
 check_version() {
 echo "Checking scripts for new versions..."
 while IFS= read -r SCRIPT; do
