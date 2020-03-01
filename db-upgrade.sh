@@ -19,8 +19,8 @@ get_current_version() {
     echo "Getting current version number..."
     sleep 3
     mysql --user="$USER" --host="$HOST" --password="$PASS" --database="$DB_NAME" --execute="SELECT * FROM versionTable" > $C_VER_FILE  ;
-    CURRENT_VERION=$(cat $C_VER_FILE | tail -n 1)
-    echo "Current version: ${CURRENT_VERION}"
+    CURRENT_VERSION=$(cat $C_VER_FILE | tail -n 1)
+    echo "Current version: ${CURRENT_VERSION}"
     sleep 3
 }
 
@@ -37,7 +37,7 @@ check_version() {
 echo "Checking scripts for new versions..."
 while IFS= read -r SCRIPT; do
     SCRIPT_VER=$(sed 's/[^0-9]*//g' <<< $SCRIPT)
-    if [ $(($SCRIPT_VER)) -gt $(($CURRENT_VERION)) ]
+    if [ $(($SCRIPT_VER)) -gt $(($CURRENT_VERSION)) ]
     then
         CURRENT_SCRIPTS+=([$SCRIPT_VER]=$SCRIPT)
     fi
