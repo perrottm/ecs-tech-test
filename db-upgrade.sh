@@ -2,7 +2,7 @@
 
 #This script will run any SQL Scripts within a desired directory, to a desired Database. To execute the script run the following command:
 #./db-upgrade.sh directory username db-host db-name db-password.
-#NOTE: This will only execute scripts OF A LOWER VERSION VALUE SPECIFIED IN THE FILE NAME.
+#NOTE: This will only execute scripts OF A HIGHER VERSION VALUE SPECIFIED IN THE FILE NAME.
 #Defining variables
 
 set -e
